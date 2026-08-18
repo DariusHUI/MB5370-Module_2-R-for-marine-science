@@ -1,5 +1,5 @@
 ---
-title: "R for Marine Science Workshop 2 Exercise 2.12"
+title: "R for Marine Science - Workshop 2 - Exercise 12"
 author: "Darius HUISMAN"
 date: "2026-06-04"
 output: 
@@ -21,7 +21,7 @@ editor_options:
 ```{r setup, include=FALSE}
 # Set options, housekeeping
 knitr::opts_chunk$set(
-	echo = FALSE,
+	echo = TRUE,
 	include = TRUE,
 	message = FALSE,
 	warning = FALSE)
@@ -29,24 +29,34 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This qmd file covers the following point 12 (Keystone exercise: Estuary Fish Survey - Data Rescue Mission) of Workshop 2 of the R for Marine Science Module.
+This code contains the work realised on the last exercise (Keystone exercise: Estuary Fish Survey - Data Rescue Mission) of the second workshop of the R for Marine Science Module.
 
 The goal is to rescue and clean a messy dataset from an estuary fish survey, and then use it to explore how fish abundance changes along a salinity gradient. The exercise is structured into five phases: 
--Ingestion and Decontamination: Cleaning and standardising the raw data, including parsing dates and handling hardware error codes.
--The Relational Architecture: Building a relational database by merging the catch data with spatial metadata and water quality summaries.
--The Zero-Catch Framework: Creating a complete dataset that includes zero-catch records for all combinations of site, date, and species.
--Statistical Extraction: Summarising the data to calculate mean and standard error for fish catch and salinity across different estuary zones and species.
--Visual Communication: Using ggplot2 to create a multi-panel plot that visualises the relationship between fish abundance and salinity for different species.
 
-## Clear out environment
+  - Phase 1: Ingestion and Decontamination
+  
+      Cleaning and standardising the raw data, including parsing dates and handling hardware error codes.
 
-```{r housekeeping message=FALSE, warning=FALSE, include=FALSE}
+  - Phase 2: The Relational Architecture
+      
+      Building a relational database by merging the catch data with spatial metadata and water quality summaries.
+
+  - Phase 3: The Zero-Catch Framework
+      
+      Creating a complete dataset that includes zero-catch records for all combinations of site, date, and species.
+  
+  - Phase 4: Statistical Extraction
+      
+      Summarising the data to calculate mean and standard error for fish catch and salinity across different estuary zones and species.
+  
+  - Phase 5: Visual Communication
+      
+      Using ggplot2 to create a multi-panel plot that visualises the relationship between fish abundance and salinity for different species.
+
+
+```{r housekeeping, message=FALSE, warning=FALSE, include=FALSE}
 rm(list=ls())
 ```
-
-## Load packages
-
-Load the packages necessary to this project
 
 ```{r packages, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
@@ -82,7 +92,7 @@ species_dictionary
 
 ### catch_log
 
-```{r catch_log Ingestion and Decontamination}
+```{r catch_log Ingestion}
 # Investigate dataset catch_log
 catch_log
 head(catch_log)
@@ -90,7 +100,7 @@ glimpse(catch_log)
 str(catch_log)
 ```
 
-```{r catch_log Ingestion and Decontamination}
+```{r catch_log Decontamination}
 # Standardise the site and species names to lowercase with underscores
 clean_catch_log <- catch_log |>
   mutate(
