@@ -4,15 +4,16 @@ author: "Darius HUISMAN"
 date: "2026-06-03"
 output: 
   html_document:
-    code_folding: show
-    collapse: no
+    code_fold: false
+    echo: true
+    collapse: yes
     df_print: paged
     fig_caption: yes
     fig_height: 6
     fig_width: 10
     highlight: textmate
     theme: default
-    toc: yes
+    toc: true
     toc_float: yes
 editor: source
 ---
@@ -21,7 +22,7 @@ editor: source
 ```{r setup, include=FALSE}
 # Set options, housekeeping
 knitr::opts_chunk$set(
-	echo = FALSE,
+	echo = TRUE,
 	include = TRUE,
 	message = FALSE,
 	warning = FALSE)
@@ -49,7 +50,7 @@ source("Workshop1.R")
 ```
 
 # 1. Ingesting data into R
-```{r import_data}
+```{r import_data, include=TRUE}
 # Practice Import A: Loading a standard comma-separated plain text file
 benthic_cover <- read_csv(here::here("data/workshop1/reef_cover_log.csv"))
 
