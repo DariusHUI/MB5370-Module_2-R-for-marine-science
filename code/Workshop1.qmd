@@ -1,9 +1,9 @@
 ---
-title: "R for Marine Science Workshop 1"
+title: "R for Marine Science - Workshop 1"
 author: "Darius HUISMAN"
 date: "2026-06-03"
 output: 
- html_document:
+  html_document:
     code_folding: show
     collapse: no
     df_print: paged
@@ -11,11 +11,10 @@ output:
     fig_height: 6
     fig_width: 10
     highlight: textmate
-    theme: spacelab
+    theme: default
     toc: yes
     toc_float: yes
-editor_options: 
-  chunk_output_type: inline
+editor: source
 ---
 
 
@@ -34,12 +33,10 @@ This code contains the work realised for the first workshop of the second module
 
 This workshop focus on the improvement of foundations of data wrangling and plotting for data science. In order to complete this, better workspace setup and repository path calibration was realised. Then tidyverse grammar was used to manipulate data to provide with descriptive data summaries and adequate figure using ggplot2.
 
-## Clear out environment
 ```{r housekeeping, message=FALSE, warning=FALSE, include=FALSE}
 rm(list=ls())
 ```
 
-## Load packages
 ```{r packages, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse) 
 library(readxl)
@@ -47,7 +44,6 @@ library(here)
 library(palmerpenguins)
 ```
 
-## Source script
 ```{r source-script1, message=FALSE, warning=FALSE, include=FALSE}
 source("Workshop1.R")
 ```
