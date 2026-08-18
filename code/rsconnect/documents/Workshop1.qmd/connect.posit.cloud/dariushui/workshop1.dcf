@@ -4,9 +4,9 @@ username: dariushui
 account: dariushui
 server: connect.posit.cloud
 hostUrl: https://api.connect.posit.cloud/v1
-appId: 01a013bb-5bf6-d017-5220-d526e51ed90d
+appId: 01a01412-3664-ede8-2826-4ddc15a1200f
 bundleId:
-url: https://connect.posit.cloud/dariushui/content/01a013bb-5bf6-d017-5220-d526e51ed90d
+url: https://connect.posit.cloud/dariushui/content/01a01412-3664-ede8-2826-4ddc15a1200f
 version: 1
 asMultiple: FALSE
 asStatic: TRUE

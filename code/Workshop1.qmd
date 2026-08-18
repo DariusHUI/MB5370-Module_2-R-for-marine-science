@@ -3,19 +3,19 @@ title: "R for Marine Science - Workshop 1"
 author: "Darius HUISMAN"
 date: "2026-06-03"
 output: 
-  html_document:
-    code_fold: false
-    echo: true
-    collapse: yes
+ html_document:
+    code_folding: show
+    collapse: no
     df_print: paged
     fig_caption: yes
     fig_height: 6
     fig_width: 10
     highlight: textmate
     theme: default
-    toc: true
+    toc: yes
     toc_float: yes
-editor: source
+editor_options: 
+  chunk_output_type: inline
 ---
 
 
