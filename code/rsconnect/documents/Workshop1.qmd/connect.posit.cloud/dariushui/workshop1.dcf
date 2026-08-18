@@ -12,4 +12,4 @@ quarto_version: 1.9.38
 quarto_engines: knitr
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Workshop1.R|outputs/tables/penguin_species_mass_summary.csv|outputs/tables/penguins_final.rds|outputs/figures/mass_compare_plot.png
+ignoredFiles: Workshop1.R
