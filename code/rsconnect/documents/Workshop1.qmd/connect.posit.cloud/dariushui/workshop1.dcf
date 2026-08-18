@@ -1,0 +1,15 @@
+name: workshop1
+title: Workshop1
+username: dariushui
+account: dariushui
+server: connect.posit.cloud
+hostUrl: https://api.connect.posit.cloud/v1
+appId: 01a0137d-dcd1-4446-f4b5-8c8248478743
+bundleId:
+url: https://connect.posit.cloud/dariushui/content/01a0137d-dcd1-4446-f4b5-8c8248478743
+version: 1
+quarto_version: 1.9.38
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Workshop1.R|outputs/tables/penguin_species_mass_summary.csv|outputs/tables/penguins_final.rds|outputs/figures/mass_compare_plot.png
