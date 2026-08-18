@@ -28,28 +28,170 @@ knitr::opts_chunk$set(
 	warning = FALSE)
 ```
 
-## Introduction
+# Introduction
 
+This code contains the work realised for the first workshop of the second module of MB5370.
 
-### Clear out environment
+This workshop focus on the improvement of foundations of data wrangling and plotting for data science. In order to complete this, better workspace setup and repository path calibration was realised. Then tidyverse grammar was used to manipulate data to provide with descriptive data summaries and adequate figure using ggplot2.
+
+## Clear out environment
 ```{r housekeeping, message=FALSE, warning=FALSE, include=FALSE}
 rm(list=ls())
 ```
 
-### Load packages
+## Load packages
 ```{r packages, message=FALSE, warning=FALSE, include=FALSE}
-library(tidyverse)
+library(tidyverse) 
+library(readxl)
+library(here)
+library(palmerpenguins)
 ```
 
-### Source script
+## Source script
 ```{r source-script1, message=FALSE, warning=FALSE, include=FALSE}
 source("Workshop1.R")
 ```
 
+# 1. Ingesting data into R
+```{r import_data}
+# Practice Import A: Loading a standard comma-separated plain text file
+benthic_cover <- read_csv(here::here("data/workshop1/reef_cover_log.csv"))
 
-## 1.9 Integrating data grammar with visual diagnostics in qmd
+# Practice Import B: Parsing a tab-separated telemetry instrument array string
+acoustic_stream <- read_tsv(here::here("data/workshop1/acoustic_telemetry_stream.txt"))
 
-###1.9.1 Wrangling and Plotting in Parallel
+# Practice Import C: Targeting a specific sheet in a multi-tab Excel spreadsheet
+fisheries_annual <- read_excel(here::here("data/workshop1/fish_catch_data.xlsx"), sheet = "Commercial_2026")
+
+# Read in mangrove_data
+mangrove_data <- read_csv(file = here::here("data/workshop1/mangrove_survey_raw.csv"))
+
+# Use args within read_csv to skip headers and declare missing flags
+mangrove_data <- read_csv(
+  here::here("data/workshop1/mangrove_survey_raw.csv"),
+  skip = 5,   # Skip the first 5 lines of field notes
+  na = c(".", "NA", "9999", "ND", "blank"))  # Convert known text alts to true NA
+```
+
+
+# 2. Data frame architectures: Tibbles versus legacy tables
+```{r tibbles_and_table}
+# Force a modern tibble to degrade into a legacy base R data frame structure
+benthic_cover_df <- as.data.frame(benthic_cover)
+
+# Print the old-style dataframe structure to view
+print(benthic_cover_df)
+# And compare with tibble alternative
+print(benthic_cover)
+```
+
+# 3. Wrangling out ecological signals using Palmer Penguins
+```{r palmerpenguins_data}
+# Load the package data into active memory
+data("penguins")
+
+# Examine the structure of the dataset - always do this when loading a new dataset!
+glimpse(penguins) # tidyverse version (from dplyr package)
+str(penguins) # base R version
+
+# Generate an exploratory summary matrix
+summary(penguins)
+```
+
+# 4 Foundational grammar: Slicing, filtering, sorting, and transforming
+## 4.1 Isolating attributes with select()
+```{r palmerpenguins_select}
+# Vertically slice specific morphometric variables by explicit name
+morphology_metrics <- select(penguins, species, bill_length_mm, bill_depth_mm, body_mass_g)
+glimpse(morphology_metrics)
+
+# Retain a continuous block of attributes using the colon operator
+spatial_block <- select(penguins, species:island)
+
+# Discard logistics tracking attributes while preserving everything else using the minus sign
+clean_scientific_fields <- select(penguins, -year)
+```
+
+## 4.2 Sifting rows with filter()
+```{r palmerpenguins_filter}
+# Isolate observations belonging to a single categorical target group
+adelie_cohort <- filter(penguins, species == "Adelie")
+
+# Sift out individuals using continuous numerical boundary thresholds
+# Preserves only large penguins whose mass exceeds 4500 grams
+heavy_penguins <- filter(penguins, body_mass_g > 4500)
+
+# Combine multiple conditional parameters across separate attributes
+# Preserves records matching Gentoo penguins sampled explicitly on Biscoe Island
+biscoe_gentoo <- filter(penguins, species == "Gentoo" & island == "Biscoe")
+
+# Sift records matching multiple targeting flags within an explicit set
+sub_islands <- filter(penguins, island %in% c("Dream", "Torgersen"))
+```
+
+## 4.3 Ordering sequences with arrange()
+```{r palmerpenguins_arrange}
+# Sort penguins by ascending body mass (Default setting: Smallest mass first)
+lightest_first <- arrange(penguins, body_mass_g)
+
+# Sort penguins in descending sequence using the desc() layout wrapper
+heaviest_first <- arrange(penguins, desc(body_mass_g))
+
+# Execute nested sorting criteria: Group by species, then sort by descending bill length
+stratified_morphology <- arrange(penguins, species, desc(bill_length_mm))
+```
+
+## 4.4 Introducing the Pipe (|>)
+```{r palmerpenguins_bill_ratio}
+# use a pipe to calculate bill ratio of a specific species
+penguins_final <- penguins |>
+  mutate(bill_ratio = bill_length_mm / bill_depth_mm) |>
+  filter(species == "Adelie")
+```
+
+## 4.5 Computing new attributes with mutate()
+```{r palmerpenguins_body_mass}
+# Calculate a new morphological ratio in our environment
+penguin_ratios <- penguins  |> 
+  mutate(body_mass_kg = body_mass_g / 1000,   # Convert grams to kilograms
+         bill_ratio = bill_length_mm / bill_depth_mm  # Bill ratio
+  )
+
+# View your newly engineered variables appended to the far-right columns
+glimpse(penguin_ratios)
+```
+
+# 5. Data aggregation and ecological summarisation
+```{r palmerpenguins_group_&_summary}
+# Grouping our active memory penguins by species
+grouped_penguins <- group_by(penguins, species)
+
+# Notice that the table looks identical, but metadata notes 'Groups: species [3]'
+print(grouped_penguins)
+
+# Collapsing the buckets into explicit summary metrics
+species_mass_summary <- summarise(grouped_penguins,
+                                  mean_mass_g = mean(body_mass_g)
+)
+
+print(species_mass_summary)
+
+# Overcoming the missing value trap using na.rm = TRUE
+biological_signal <- penguins %>%
+  group_by(species, sex) %>%
+  summarise(
+    sample_size = n(),                                     # Count total individuals per category
+    mean_mass_g = mean(body_mass_g, na.rm = TRUE),         # Calculate mean ignoring missing cells
+    sd_mass_g   = sd(body_mass_g, na.rm = TRUE)            # Standard deviation calculation
+  )
+
+print(biological_signal)
+```
+
+
+# 6. Integrating data grammar with visual diagnostics in qmd
+
+## 7.1 Wrangling and Plotting in Parallel
 
 ```{r Wrangling and Plotting in Parallel}
 #summary table
@@ -61,7 +203,7 @@ penguins|>
   geom_boxplot()  
 ```
 
-###1.9.2 Piping Directly to Visualisation
+## 7.2 Piping Directly to Visualisation
 ```{r Piping Directly to Visualisation}
 # Pipe directly from aggregation to plotting with error bars
 mass_compare_plot <- penguins |>
@@ -119,7 +261,7 @@ mass_compare_plot
 ```
 
 
-##1.10 Saving, exporting, and version milestones
+# 8. Saving, exporting, and version milestones
 
 ```{r Create output directories if they do not exist}
 # Create output directories if they do not exist:
@@ -143,6 +285,5 @@ ggsave("outputs/figures/mass_compare_plot.png",
        plot = mass_compare_plot, 
        width = 120, height = 120, 
        units = "mm", dpi = 300)
-
 ```
 
