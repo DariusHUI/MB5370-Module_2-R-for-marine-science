@@ -10,7 +10,7 @@ The module is devided into 4 different workshops as described below:
 
   - Workshop 4 - Spatial Engineering & Reproducible Reporting
   
-  * note that the 3rd and 4th workshops haven't been conducted as planned, which is why no work is present in this repository for Workshop 3 and the work for Workshop 4 in not compete
+  * note that the 3rd and 4th workshops haven't been conducted as planned, which is why no work is present in this repository for Workshop 3 and the work for Workshop 4 is not compete
   
   This repository is devided into different parts as follow:
 
